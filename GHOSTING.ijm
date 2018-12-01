@@ -19,21 +19,21 @@ GHOSTING_2 = call("ij.Prefs.get", "myMacros.GHOSTING_2", "defaultValue");
 //Ghoting_ROIs=
 
 // run GHOSTING TEST:
-GHOSTING_TEST(GHOSTING_1,Results_dir);
-GHOSTING_TEST(GHOSTING_2,Results_dir);
+GHOSTING_TEST(GHOSTING_1,GHOSTING_2,Results_dir);
+//GHOSTING_TEST(GHOSTING_2,Results_dir);
 
 
 
 
 //////////////////////////
 /// Function definition:   GEOMETRIC_LINEARITY_TEST
-function GHOSTING_TEST(filename,results_dir) {
+function GHOSTING_TEST(filename,filename2,results_dir) {
 
 
 
-outdir=results_dir+File.separator+"LINEARITY";
+outdir=results_dir+File.separator+"GHOSTING";
 screenshot_dir=outdir+File.separator+"ScreenshotCheck";
-//Create uniformity folder
+//Create GHOSTING folder
 if ( File.isDirectory(outdir)==0 ){
 print("Creating folder "+ outdir);
 File.makeDirectory(outdir);
@@ -46,8 +46,10 @@ File.makeDirectory(screenshot_dir);
 
 open(filename);
 myimage=getTitle();
-selectWindow(myimage);
+open(filename2);
+myimage2=getTitle();
 
+selectWindow(myimage);  // Find centre from the NSA=1 image
 
 centre_pos=find_bottle_centre();
 print("Phantom centre at x,y ="); 
@@ -73,12 +75,49 @@ roiManager("delete");
 roiManager("select", 0);
 roiManager("rename", "Noise");
 
-//create rois for signal measure
+//create roi for signal measure
 makeRectangle(centre_pos[0]-10, centre_pos[1]-10, 20, 20);
 roiManager("add");
 roiManager("select", 1);
 roiManager("rename", "Signal");
-roiManager("measure");
+
+
+//mask the bottle
+
+//create roi of max ghosting 
+makeRectangle(centre_pos[0]-10 -20, centre_pos[1]-10, 20, 20);
+roiManager("add");
+roiManager("select", 2);
+roiManager("rename", "G1");
+
+makeRectangle(centre_pos[0]-10 +20, centre_pos[1]-10, 20, 20);
+roiManager("add");
+roiManager("select", 3);
+roiManager("rename", "G2");
+
+makeRectangle(centre_pos[0]-10 +40, centre_pos[1]-10, 20, 20);
+roiManager("add");
+roiManager("select", 4);
+roiManager("rename", "G3");
+
+makeRectangle(centre_pos[0]-10 +60, centre_pos[1]-10, 20, 20);
+roiManager("add");
+roiManager("select", 5);
+roiManager("rename", "G4");
+
+makeRectangle(centre_pos[0]-10 +80, centre_pos[1]-10, 20, 20);
+roiManager("add");
+roiManager("select", 6);
+roiManager("rename", "G5");
+
+makeRectangle(centre_pos[0]-10 +100, centre_pos[1]-10, 20, 20);
+roiManager("add");
+roiManager("select", 7);
+roiManager("rename", "G6");
+
+
+
+//roiManager("measure");
 }
 
 
@@ -92,63 +131,79 @@ run("Duplicate...", "title=&name");
 run("Find Edges");
 
 makeRectangle(0, 0, getWidth(), getHeight());
+
+//check x direction
 Xprofile = getProfile();
 xpos=Array.rankPositions(Xprofile);
 //midx=(lengthOf(xpos)-1)/2;
-edge_uncertainty=10;
-xs=newArray(5);
-ys=newArray(5);
+//edge_uncertainty=10;
+min_object_size=30;
+max_object_size=40;
+Nevents=5;
+
+setOption("ExpandableArrays", true);
+xs=newArray(1);
+ys=newArray(1);
+widths=xs;
+heigths=ys;
+
 events=0;
-for (i=0;i<30;i++) {
+for (i=0;i<20;i++) {
 xcent=(xpos[lengthOf(xpos)-1]+xpos[lengthOf(xpos)-2-i])/2;
 dx=abs(xpos[lengthOf(xpos)-1]-xpos[lengthOf(xpos)-2-i]);
-toprint=newArray("dx=",dx);
-Array.print(toprint);
 
 
-if ( dx  >  edge_uncertainty ){
+if ( (dx  >  min_object_size) &&  (dx  <  max_object_size) ){
  xs[events]=xcent;
+ widths[events]=dx;
  events++;
  print("events= "+events);
- if (events>xs.length-1){
+ if (events>Nevents){
  	break;}
  }
 }
 
-Array.getStatistics(xs, min, max, xcent_mean, stdDev);
-toprint=newArray("this is the mean x point",xcent_mean);
-Array.print(toprint);
+Array.getStatistics(xs, minx, maxx, meanx, stdDev);
+Array.getStatistics(widths, minw, maxw, meanw, stdDev);
+
+Array.print(widths);
+print("Bottle centre x="+meanx + " and its width is "+maxw);
 
 
+//check y direction
 selectWindow("edge image");
-//run("Rotate 90 Degrees Left");
-//makeRectangle(0, 0, 250, 250);
 setKeyDown("alt");
 Yprofile = getProfile();
 setKeyDown("none");
 ypos=Array.rankPositions(Yprofile);
-midy=(lengthOf(xpos)-1)/2;
+//midy=(lengthOf(xpos)-1)/2;
 events=0;
-for (i=0;i<30;i++) {
+for (i=0;i<50;i++) {
 ycent=( ypos[lengthOf(ypos)-1] + ypos[lengthOf(ypos)-2-i]  )/2;
 dy=abs( ypos[lengthOf(ypos)-1] - ypos[lengthOf(ypos)-2-i]  );
 
-if ( dy  >  edge_uncertainty ){
+if ( (dy  >  min_object_size) &&  (dy  <  max_object_size) ){
  ys[events]=ycent;
+ heigths[events]=dy;
  events++;
- if (events>xs.length-1){
+ if (events>Nevents){
  	break;}
  }
 }
 
 
-Array.getStatistics(ys, min, max, ycent_mean, stdDev);
-toprint=newArray("this is the mean y point",ycent_mean);
-Array.print(toprint);
+Array.getStatistics(ys, miny, maxy, meany, stdDev);
+Array.getStatistics(heigths, minh, maxh, meanh, stdDev);
 
-xcent=round(xcent_mean);
-ycent=round(ycent_mean);
-centre_pos=newArray(xcent,ycent);
+Array.print(heigths);
+print("Bottle centre y="+meany + " and its height is "+maxh);
+
+
+myx=round(maxx);
+myy=round(maxy);
+myw=round(maxw);
+myh=round(maxh);
+centre_pos=newArray(myx,myy,myw,myh);
 close();
 return centre_pos;
 	};//end of function
