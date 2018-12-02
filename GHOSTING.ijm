@@ -44,28 +44,64 @@ print("Creating folder "+ screenshot_dir);
 File.makeDirectory(screenshot_dir);
 }
 
+//open both images
 open(filename);
 myimage=getTitle();
+
 open(filename2);
 myimage2=getTitle();
 
-selectWindow(myimage);  // Find centre from the NSA=1 image
-
-centre_pos=find_bottle_centre();
+// Find centre from the NSA=1 image
+selectWindow(myimage);  
+bottle_pos=find_bottle();
 print("Phantom centre at x,y ="); 
-Array.print(centre_pos); //show central point (x,y) of the phantom
+Array.print(bottle_pos); //show central point (x,y) of the phantom
+
+//draw ROIs and do the maths for Ghosting measure:  Ghosting = 100*(Maximum Ghost–Noise)/Signal
+Ghosting_measure=ROIs_Draw_Cal(myimage,bottle_pos);
+Ghosting_measure2=ROIs_Draw_Cal(myimage2,bottle_pos);
+
+
+
+
+
+//roiManager("measure");
+}
+
+
+
+
+
+
+
+
+//////////////////////////
+
+/// Function definition:  CreateROIs
+function ROIs_Draw_Cal(myimage,bottle_pos) {
+//Creates ROIs needed for GHOSTING_TEST
+
+selectWindow(myimage);  
+
+//bottle position and dimension
+xx=bottle_pos[0];
+yy=bottle_pos[1];
+ww=bottle_pos[2];
+hh=bottle_pos[3];
 
 //create rois for noise measure
-off_pos=newArray(centre_pos[0]+105,centre_pos[1]-105);
+nxx=xx+105;
+nyy=yy-105;
+
 //off_pos=newArray(140+40,33+65);
 roiManager("reset");
-makeRectangle(off_pos[0]-40, off_pos[1]-65, 20, 20);
+makeRectangle(nxx-40, nyy-65, 20, 20);
 roiManager("add");
-makeRectangle(off_pos[0]+40, off_pos[1]-65, 20, 20);
+makeRectangle(nxx+40, nyy-65, 20, 20);
 roiManager("add");
-makeRectangle(off_pos[0]-40, off_pos[1]+65, 20, 20);
+makeRectangle(nxx-40, nyy+65, 20, 20);
 roiManager("add");
-makeRectangle(off_pos[0]+40, off_pos[1]+65, 20, 20);
+makeRectangle(nxx+40, nyy+65, 20, 20);
 roiManager("add");
 roiManager("select", newArray(0, 1, 2, 3));
 roiManager("combine");
@@ -76,56 +112,102 @@ roiManager("select", 0);
 roiManager("rename", "Noise");
 
 //create roi for signal measure
-makeRectangle(centre_pos[0]-10, centre_pos[1]-10, 20, 20);
+makeRectangle(xx-10, yy-10, 20, 20);
 roiManager("add");
 roiManager("select", 1);
 roiManager("rename", "Signal");
 
 
-//mask the bottle
+// Calculate Noise and Signal values
+roiManager("select", newArray(0,1));
+run("Set Measurements...", "  mean redirect=None decimal=2");
+run("Clear Results");
+
+roiManager("multi measure")
+
+Stack.getDimensions(width, height, channels, slices, frames)
+
+
+Signal=newArray(slices);
+Noise=newArray(slices);
+
+for (i = 0; i < slices; i++) {
+Signal[i]=getResult("Mean(Signal)", i);
+Noise[i]=getResult("Mean(Noise)", i);
+}
+
+print("Mean Signal values for the 4 echoes are:");
+Array.print(Signal);
+print("Mean Noise values for the 4 echoes are:");
+Array.print(Noise);
+
 
 //create roi of max ghosting 
-makeRectangle(centre_pos[0]-10 -20, centre_pos[1]-10, 20, 20);
+rc=newArray(-2,-1,1,2,3,4,5,6,7,8);
+
+for (i = 0; i < lengthOf(rc); i++) {
+	makeRectangle(xx+rc[i]/abs(rc[i])*ww/2-10+20*rc[i],yy-10, 20, 20);
 roiManager("add");
-roiManager("select", 2);
-roiManager("rename", "G1");
-
-makeRectangle(centre_pos[0]-10 +20, centre_pos[1]-10, 20, 20);
-roiManager("add");
-roiManager("select", 3);
-roiManager("rename", "G2");
-
-makeRectangle(centre_pos[0]-10 +40, centre_pos[1]-10, 20, 20);
-roiManager("add");
-roiManager("select", 4);
-roiManager("rename", "G3");
-
-makeRectangle(centre_pos[0]-10 +60, centre_pos[1]-10, 20, 20);
-roiManager("add");
-roiManager("select", 5);
-roiManager("rename", "G4");
-
-makeRectangle(centre_pos[0]-10 +80, centre_pos[1]-10, 20, 20);
-roiManager("add");
-roiManager("select", 6);
-roiManager("rename", "G5");
-
-makeRectangle(centre_pos[0]-10 +100, centre_pos[1]-10, 20, 20);
-roiManager("add");
-roiManager("select", 7);
-roiManager("rename", "G6");
-
-
-
-//roiManager("measure");
+roiname="G"+i;
+roiManager("select", i+2);
+roiManager("rename", roiname);
 }
 
 
-//////////////////////////
+
+// create all posible ghosting rois
+for (i = 0; i < lengthOf(rc); i++) {
+	makeRectangle(xx-10,yy-rc[i]/abs(rc[i])*hh/2-10-20*rc[i], 20, 20);
+roiManager("add");
+roiname="G"+i+lengthOf(rc);
+roiManager("select", i+2+lengthOf(rc));
+roiManager("rename", roiname);
+}
+
+kk=Array.getSequence(2*lengthOf(rc));
+for (i = 0; i < 2*lengthOf(kk); i++) {
+kk[i]=kk[i]+2;
+}
+
+roiManager("select", kk);
+roiManager("show all");
+
+//select the roi with max ghosting (from the first echo)
+run("Set Measurements...", "  mean redirect=None decimal=2");
+run("Clear Results");
+roiManager("measure");
+
+ghosts=newArray(lengthOf(kk));
+for (i = 0; i < lengthOf(kk); i++) {
+	ghosts[i]=getResult("Mean", i);
+}
+
+print("Ghosts:");
+Array.print(ghosts);
+sortGhosts=Array.rankPositions(ghosts);
+print("Sorted ghosts rank:");
+Array.print(sortGhosts);
+
+
+//Calculate the ghosting measure
+Ghosting_measure=newArray(slices);
+for (i = 0; i < slices; i++) {
+Ghosting_measure[i]=(1-Noise[i])/Signal[i];
+}
+return Ghosting_measure;
+
+
+
+}
+
+
+
+
+/////////////////////////////////////
 /// Function definition:  find_phantom_centre
 
-function find_bottle_centre(){
-//Finds x,y position in the centre of the phantom
+function find_bottle(){
+//Finds centre position x,y the width and height of the bottle. [x y w h]
 name = "edge image";
 run("Duplicate...", "title=&name");
 run("Find Edges");
@@ -203,9 +285,9 @@ myx=round(maxx);
 myy=round(maxy);
 myw=round(maxw);
 myh=round(maxh);
-centre_pos=newArray(myx,myy,myw,myh);
+position=newArray(myx,myy,myw,myh);
 close();
-return centre_pos;
+return position;
 	};//end of function
 
 
