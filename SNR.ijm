@@ -10,28 +10,28 @@ macro "SNR" {
 //Results_dir=arg_array[0];
 
 
-//Retrieve filenames and Results_dir path 
+//Retrieve filenames and Results_dir path
 Results_dir = call("ij.Prefs.get", "myMacros.savedir", "defaultValue");
- 
-// HEAD coil images
-HEAD_SNR_TRA_1 = call("ij.Prefs.get", "myMacros.HEAD_SNR_TRA_1", "defaultValue"); 
-HEAD_SNR_COR_1 = call("ij.Prefs.get", "myMacros.HEAD_SNR_COR_1", "defaultValue"); 
-HEAD_SNR_SAG_1 = call("ij.Prefs.get", "myMacros.HEAD_SNR_SAG_1", "defaultValue"); 
 
-HEAD_SNR_TRA_2 = call("ij.Prefs.get", "myMacros.HEAD_SNR_TRA_2", "defaultValue"); 
-HEAD_SNR_COR_2 = call("ij.Prefs.get", "myMacros.HEAD_SNR_COR_2", "defaultValue"); 
-HEAD_SNR_SAG_2 = call("ij.Prefs.get", "myMacros.HEAD_SNR_SAG_2", "defaultValue"); 
+// HEAD coil images
+HEAD_SNR_TRA_1 = call("ij.Prefs.get", "myMacros.HEAD_SNR_TRA_1", "defaultValue");
+HEAD_SNR_COR_1 = call("ij.Prefs.get", "myMacros.HEAD_SNR_COR_1", "defaultValue");
+HEAD_SNR_SAG_1 = call("ij.Prefs.get", "myMacros.HEAD_SNR_SAG_1", "defaultValue");
+
+HEAD_SNR_TRA_2 = call("ij.Prefs.get", "myMacros.HEAD_SNR_TRA_2", "defaultValue");
+HEAD_SNR_COR_2 = call("ij.Prefs.get", "myMacros.HEAD_SNR_COR_2", "defaultValue");
+HEAD_SNR_SAG_2 = call("ij.Prefs.get", "myMacros.HEAD_SNR_SAG_2", "defaultValue");
 
 
 
 // BODY coil images
-BODY_SNR_TRA_1 = call("ij.Prefs.get", "myMacros.BODY_SNR_TRA_1", "defaultValue"); 
-BODY_SNR_COR_1 = call("ij.Prefs.get", "myMacros.BODY_SNR_COR_1", "defaultValue"); 
-BODY_SNR_SAG_1 = call("ij.Prefs.get", "myMacros.BODY_SNR_SAG_1", "defaultValue"); 
+BODY_SNR_TRA_1 = call("ij.Prefs.get", "myMacros.BODY_SNR_TRA_1", "defaultValue");
+BODY_SNR_COR_1 = call("ij.Prefs.get", "myMacros.BODY_SNR_COR_1", "defaultValue");
+BODY_SNR_SAG_1 = call("ij.Prefs.get", "myMacros.BODY_SNR_SAG_1", "defaultValue");
 
-BODY_SNR_TRA_2 = call("ij.Prefs.get", "myMacros.BODY_SNR_TRA_2", "defaultValue"); 
-BODY_SNR_COR_2 = call("ij.Prefs.get", "myMacros.BODY_SNR_COR_2", "defaultValue"); 
-BODY_SNR_SAG_2 = call("ij.Prefs.get", "myMacros.BODY_SNR_SAG_2", "defaultValue"); 
+BODY_SNR_TRA_2 = call("ij.Prefs.get", "myMacros.BODY_SNR_TRA_2", "defaultValue");
+BODY_SNR_COR_2 = call("ij.Prefs.get", "myMacros.BODY_SNR_COR_2", "defaultValue");
+BODY_SNR_SAG_2 = call("ij.Prefs.get", "myMacros.BODY_SNR_SAG_2", "defaultValue");
 
 
 
@@ -93,7 +93,7 @@ myimage=getTitle();
 selectWindow(myimage);
 
 centre_pos=find_phantom_centre();
-print("Phantom centre at x,y ="); 
+print("Phantom centre at x,y =");
 Array.print(centre_pos); //show central point (x,y) of the phantom
 
 selectWindow(myimage);
@@ -115,9 +115,9 @@ roiManager("Add");
 
 
 
-//////  Uncomment the next 7 lines to manually move ROIs 
+//////  Uncomment the next 7 lines to manually move ROIs
 //roiManager("Combine");
-//waitForUser( "Pause","Move ROI as required \n Press OK when finished"); 
+//waitForUser( "Pause","Move ROI as required \n Press OK when finished");
 //selectWindow("SE_HEAD_SNR_TRA_1");
 //roiManager("Split");
 //roiManager("Select", newArray(0,1,2,3,4));
@@ -152,9 +152,10 @@ run("Clear Results");
 //take screenshots
 selectWindow(myimage);
 setLocation(1,1,1028,1028);
-wait(150);
 myscreenshot=screenshot_dir+File.separator+myimage+"_SNR.png";
+wait(100);
 exec("screencapture", myscreenshot);
+wait(100);
 setLocation(1,1,300,300);
 
 close("*dup*");
@@ -208,5 +209,3 @@ return centre_pos;
 
 
   }
-
-
