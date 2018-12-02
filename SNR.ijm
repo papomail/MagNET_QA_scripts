@@ -152,9 +152,8 @@ run("Clear Results");
 //take screenshots
 selectWindow(myimage);
 setLocation(1,1,1028,1028);
-wait(50);
+wait(150);
 myscreenshot=screenshot_dir+File.separator+myimage+"_SNR.png";
-wait(50);
 exec("screencapture", myscreenshot);
 setLocation(1,1,300,300);
 
