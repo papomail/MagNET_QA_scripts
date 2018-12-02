@@ -1,6 +1,8 @@
 
 macro "GHOSTING" {
 
+TestName="GHOSTING";
+
 close("*");
 ////Use if you want to call the macro with arguments
 //arguments=getArgument()
@@ -20,13 +22,14 @@ GHOSTING_2 = call("ij.Prefs.get", "myMacros.GHOSTING_2", "defaultValue");
 
 // run GHOSTING TEST:
 GHOSTING_TEST(GHOSTING_1,GHOSTING_2,Results_dir);
-//GHOSTING_TEST(GHOSTING_2,Results_dir);
+
 
 
 
 
 //////////////////////////
-/// Function definition:   GEOMETRIC_LINEARITY_TEST
+/// Function definition:   GHOSTING_TEST
+// Runs the main GHOSTING_TEST and produces the results in csv file and the screenshots to check ROI selection. 
 function GHOSTING_TEST(filename,filename2,results_dir) {
 
 
@@ -57,15 +60,33 @@ bottle_pos=find_bottle();
 print("Phantom centre at x,y ="); 
 Array.print(bottle_pos); //show central point (x,y) of the phantom
 
-//draw ROIs and do the maths for Ghosting measure:  Ghosting = 100*(Maximum Ghost–Noise)/Signal
-Ghosting_measure=ROIs_Draw_Cal(myimage,bottle_pos);
-Ghosting_measure2=ROIs_Draw_Cal(myimage2,bottle_pos);
+//draw ROIs and do the maths for Ghosting measure:  Ghosting = 100*abs(Maximum Ghost–Noise)/Signal
+Ghosting_NSA1=ROIs_Draw_Cal(myimage,bottle_pos);
+Ghosting_NSA2=ROIs_Draw_Cal(myimage2,bottle_pos);
+
+
+//take screenshots
+TakeScreenshot(myimage,screenshot_dir,TestName);
+TakeScreenshot(myimage2,screenshot_dir,TestName);
+
+
+//saves the ghosting measure to a results table
+run("Clear Results");
+for (i = 0; i < Ghosting_NSA1.length; i++) {
+setResult("Ghosting_NSA1", i, Ghosting_NSA1[i]);
+setResult("Ghosting_NSA2", i, Ghosting_NSA2[i]);
+updateResults();
+}
+
+//saves the results to a .csv file 
+saveAs("Results", outdir+File.separator+myimage+"_"+TestName+".csv");
+
+
+Array.print(Ghosting_NSA1);
+Array.print(Ghosting_NSA2);
 
 
 
-
-
-//roiManager("measure");
 }
 
 
@@ -76,10 +97,22 @@ Ghosting_measure2=ROIs_Draw_Cal(myimage2,bottle_pos);
 
 
 //////////////////////////
+/// Function definition:  TakeScreenshot
+function TakeScreenshot(myimage,screenshot_dir,TestName) {
+selectWindow(myimage);
+setLocation(1,1,1028,1028);
+wait(100);
+myscreenshot=screenshot_dir+File.separator+myimage+"_"+TestName+".png";
+exec("screencapture", myscreenshot);
+setLocation(1,1,300,300);
+}
+
+
+
 
 /// Function definition:  CreateROIs
 function ROIs_Draw_Cal(myimage,bottle_pos) {
-//Creates ROIs needed for GHOSTING_TEST
+//Creates ROIs needed for GHOSTING_TEST and calculates the Ghosting measure from them. Ghosting = 100*abs(Maximum Ghost–Noise)/Signal
 
 selectWindow(myimage);  
 
@@ -123,14 +156,14 @@ roiManager("select", newArray(0,1));
 run("Set Measurements...", "  mean redirect=None decimal=2");
 run("Clear Results");
 
-roiManager("multi measure")
 
-Stack.getDimensions(width, height, channels, slices, frames)
-
+Stack.getDimensions(width, height, channels, slices, frames);
 
 Signal=newArray(slices);
 Noise=newArray(slices);
 
+
+roiManager("multi measure")
 for (i = 0; i < slices; i++) {
 Signal[i]=getResult("Mean(Signal)", i);
 Noise[i]=getResult("Mean(Noise)", i);
@@ -164,8 +197,9 @@ roiManager("select", i+2+lengthOf(rc));
 roiManager("rename", roiname);
 }
 
-kk=Array.getSequence(2*lengthOf(rc));
-for (i = 0; i < 2*lengthOf(kk); i++) {
+L=2*lengthOf(rc);
+kk=Array.getSequence(L);
+for (i = 0; i < L; i++) {
 kk[i]=kk[i]+2;
 }
 
@@ -177,8 +211,8 @@ run("Set Measurements...", "  mean redirect=None decimal=2");
 run("Clear Results");
 roiManager("measure");
 
-ghosts=newArray(lengthOf(kk));
-for (i = 0; i < lengthOf(kk); i++) {
+ghosts=newArray(L);
+for (i = 0; i < L; i++) {
 	ghosts[i]=getResult("Mean", i);
 }
 
@@ -188,11 +222,35 @@ sortGhosts=Array.rankPositions(ghosts);
 print("Sorted ghosts rank:");
 Array.print(sortGhosts);
 
+roiManager("deselect");
+roiManager("deselect");
+
+roiManager("select", 2+sortGhosts[sortGhosts.length-1]); //Select the ROI with max ghosting. (first two rois correspond to Noise and Signal)
+roiManager("add");
+
+roiManager("select", roiManager("count")-1);
+roiManager("rename", "MaxGhost");
+
+//Delete the ghost ROIs that aren't the maximum
+roiManager("select", kk); 
+roiManager("delete");
+
+//get maxghost values
+MaxGhost=newArray(slices);
+roiManager("select", roiManager("count")-1);
+roiManager("multi measure");
+for (i = 0; i < slices; i++) {
+MaxGhost[i]=getResult("Mean(MaxGhost)", i);
+
+}
+
+roiManager("show all with labels")")
 
 //Calculate the ghosting measure
 Ghosting_measure=newArray(slices);
 for (i = 0; i < slices; i++) {
-Ghosting_measure[i]=(1-Noise[i])/Signal[i];
+Ghosting_measure[i]=100*abs(MaxGhost[i]-Noise[i])/Signal[i];
+
 }
 return Ghosting_measure;
 
