@@ -12,16 +12,16 @@ macro "GEOMETRIC_LINEARITY" {
 
 //Retrieve filenames and Results_dir path 
 Results_dir = call("ij.Prefs.get", "myMacros.savedir", "defaultValue"); 
-GEOMETRIC_LINEARITY_TRA = call("ij.Prefs.get", "myMacros.GEOMETRIC_LINEARITY_TRA", "defaultValue"); 
-GEOMETRIC_LINEARITY_COR = call("ij.Prefs.get", "myMacros.GEOMETRIC_LINEARITY_COR", "defaultValue"); 
-GEOMETRIC_LINEARITY_SAG = call("ij.Prefs.get", "myMacros.GEOMETRIC_LINEARITY_SAG", "defaultValue"); 
+GEOMETRY_TRA = call("ij.Prefs.get", "myMacros.GEOMETRY_TRA", "defaultValue"); 
+GEOMETRY_COR = call("ij.Prefs.get", "myMacros.GEOMETRY_COR", "defaultValue"); 
+GEOMETRY_SAG = call("ij.Prefs.get", "myMacros.GEOMETRY_SAG", "defaultValue"); 
 
 
 
 // run SIGNAL UNIFORMITY TEST for 3 slice orientations:
-GEOMETRIC_LINEARITY_TEST(GEOMETRIC_LINEARITY_TRA,Results_dir);
-GEOMETRIC_LINEARITY_TEST(GEOMETRIC_LINEARITY_COR,Results_dir);
-GEOMETRIC_LINEARITY_TEST(GEOMETRIC_LINEARITY_SAG,Results_dir);
+GEOMETRIC_LINEARITY_TEST(GEOMETRY_TRA,Results_dir);
+GEOMETRIC_LINEARITY_TEST(GEOMETRY_COR,Results_dir);
+GEOMETRIC_LINEARITY_TEST(GEOMETRY_SAG,Results_dir);
 
 
 

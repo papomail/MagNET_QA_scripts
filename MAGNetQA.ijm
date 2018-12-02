@@ -24,9 +24,9 @@ BODY_SNR_SAG_2="/Users/papo/Documents/QA and Acceptance tests/PETMR_QA_20181029_
 
 
 //GEOMETRIC_LINEARITY_TRA measurements
- GEOMETRIC_LINEARITY_TRA="/Users/papo/Documents/QA and Acceptance tests/PETMR_QA_20181029_Pat/hierarchixca/Annual_Qa_Mmr_Biograph/All_Physics_Marilena/SE_BODY_GEOMETRIC_LINEARITY_TRA";
- GEOMETRIC_LINEARITY_COR="/Users/papo/Documents/QA and Acceptance tests/PETMR_QA_20181029_Pat/hierarchixca/Annual_Qa_Mmr_Biograph/All_Physics_Marilena/SE_BODY_GEOMETRIC_LINEARITY_COR";
- GEOMETRIC_LINEARITY_SAG="/Users/papo/Documents/QA and Acceptance tests/PETMR_QA_20181029_Pat/hierarchixca/Annual_Qa_Mmr_Biograph/All_Physics_Marilena/SE_BODY_GEOMETRIC_LINEARITY_SAG";
+ GEOMETRY_TRA="/Users/papo/Documents/QA and Acceptance tests/PETMR_QA_20181029_Pat/hierarchixca/Annual_Qa_Mmr_Biograph/All_Physics_Marilena/SE_BODY_GEOMETRIC_LINEARITY_TRA";
+ GEOMETRY_COR="/Users/papo/Documents/QA and Acceptance tests/PETMR_QA_20181029_Pat/hierarchixca/Annual_Qa_Mmr_Biograph/All_Physics_Marilena/SE_BODY_GEOMETRIC_LINEARITY_COR";
+ GEOMETRY_SAG="/Users/papo/Documents/QA and Acceptance tests/PETMR_QA_20181029_Pat/hierarchixca/Annual_Qa_Mmr_Biograph/All_Physics_Marilena/SE_BODY_GEOMETRIC_LINEARITY_SAG";
 
 //GHOSTING measurements
  GHOSTING_1="/Users/papo/Documents/QA and Acceptance tests/PETMR_QA_20181029_Pat/hierarchixca/Annual_Qa_Mmr_Biograph/All_Physics_Marilena/MultiEchoSE_HEAD_GHOSTING_TRA_NSA1";
@@ -67,9 +67,9 @@ call("ij.Prefs.set", "myMacros.BODY_SNR_SAG_2", BODY_SNR_SAG_2);
 
 
 //Geometry
-call("ij.Prefs.set", "myMacros.GEOMETRIC_LINEARITY_TRA", GEOMETRIC_LINEARITY_TRA);
-call("ij.Prefs.set", "myMacros.GEOMETRIC_LINEARITY_COR", GEOMETRIC_LINEARITY_COR);
-call("ij.Prefs.set", "myMacros.GEOMETRIC_LINEARITY_SAG", GEOMETRIC_LINEARITY_SAG);
+call("ij.Prefs.set", "myMacros.GEOMETRY_TRA", GEOMETRY_TRA);
+call("ij.Prefs.set", "myMacros.GEOMETRY_COR", GEOMETRY_COR);
+call("ij.Prefs.set", "myMacros.GEOMETRY_SAG", GEOMETRY_SAG);
 
 //Ghosting
 call("ij.Prefs.set", "myMacros.GHOSTING_1", GHOSTING_1);
