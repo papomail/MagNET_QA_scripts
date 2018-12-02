@@ -73,7 +73,7 @@ outdir=results_dir+File.separator+"SNR";
 screenshot_dir=outdir+File.separator+"ScreenshotCheck";
 
 
-//Create uniformity folder
+//Create SNR folder
 if ( File.isDirectory(outdir)==0 ){
 print("Creating folder "+ outdir);
 File.makeDirectory(outdir);
@@ -152,8 +152,9 @@ run("Clear Results");
 //take screenshots
 selectWindow(myimage);
 setLocation(1,1,1028,1028);
-wait(100);
+wait(50);
 myscreenshot=screenshot_dir+File.separator+myimage+"_SNR.png";
+wait(50);
 exec("screencapture", myscreenshot);
 setLocation(1,1,300,300);
 
