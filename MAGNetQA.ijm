@@ -86,20 +86,20 @@ runMacro("/Users/papo/Documents/QA and Acceptance tests/NEW_MACROS/SNR.ijm") ;
 
 
 // RUN SIGNAL UNIFORMITY: 
-//runMacro("/Users/papo/Documents/QA and Acceptance tests/NEW_MACROS/SIGNAL_UNIFORMITY.ijm") ;
+runMacro("/Users/papo/Documents/QA and Acceptance tests/NEW_MACROS/SIGNAL_UNIFORMITY.ijm") ;
 
 // RUN GEOMETRIC_LINEARITY:
-//runMacro("/Users/papo/Documents/QA and Acceptance tests/NEW_MACROS/GEOMETRIC_LINEARITY.ijm");
+runMacro("/Users/papo/Documents/QA and Acceptance tests/NEW_MACROS/GEOMETRIC_LINEARITY.ijm");
 
 
 // RUN SLICE WIDTH:
-//runMacro("/Users/papo/Documents/QA and Acceptance tests/NEW_MACROS/SLICE_WIDTH.ijm");
+runMacro("/Users/papo/Documents/QA and Acceptance tests/NEW_MACROS/SLICE_WIDTH.ijm");
 
 
 // RUN GHOSTING:
-//runMacro("/Users/papo/Documents/QA and Acceptance tests/NEW_MACROS/GHOSTING.ijm");
+runMacro("/Users/papo/Documents/QA and Acceptance tests/NEW_MACROS/GHOSTING.ijm");
 
-//close("*");
+close("*");
 
 
 print("");
