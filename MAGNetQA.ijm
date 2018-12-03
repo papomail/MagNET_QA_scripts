@@ -98,10 +98,12 @@ runMacro("/Users/papo/MagNET_QA_scripts/SLICE_WIDTH.ijm");
 // RUN GHOSTING:
 runMacro("/Users/papo/MagNET_QA_scripts/GHOSTING.ijm");
 
+
+
 close("*");
 
-
-print("");
-print("Done!");
 print("");
 print("");
+print("");
+print("Done! Closing FIJI now... ");
+run("Quit");
