@@ -153,9 +153,9 @@ run("Clear Results");
 selectWindow(myimage);
 setLocation(1,1,1028,1028);
 myscreenshot=screenshot_dir+File.separator+myimage+"_SNR.png";
+roiManager("show all");
 wait(100);
 exec("screencapture", myscreenshot);
-wait(100);
 setLocation(1,1,300,300);
 
 close("*dup*");
