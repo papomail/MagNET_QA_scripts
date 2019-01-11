@@ -2,7 +2,7 @@
 close("*")
 roiManager("reset");
 
-//SNR measurements with the HEAD COIL
+// SNR measurements with the HEAD COIL
  HEAD_SNR_TRA_1="/Users/papo/Documents/QA and Acceptance tests/PETMR_QA_20181029_Pat/hierarchixca/Annual_Qa_Mmr_Biograph/All_Physics_Marilena/SE_HEAD_SNR_TRA_1";
  HEAD_SNR_COR_1="/Users/papo/Documents/QA and Acceptance tests/PETMR_QA_20181029_Pat/hierarchixca/Annual_Qa_Mmr_Biograph/All_Physics_Marilena/SE_HEAD_SNR_COR_1";
  HEAD_SNR_SAG_1="/Users/papo/Documents/QA and Acceptance tests/PETMR_QA_20181029_Pat/hierarchixca/Annual_Qa_Mmr_Biograph/All_Physics_Marilena/SE_HEAD_SNR_SAG_1";
@@ -12,7 +12,7 @@ roiManager("reset");
  HEAD_SNR_SAG_2="/Users/papo/Documents/QA and Acceptance tests/PETMR_QA_20181029_Pat/hierarchixca/Annual_Qa_Mmr_Biograph/All_Physics_Marilena/SE_HEAD_SNR_SAG_2";
 
 
-//SNR measurements with the BODY COIL
+// SNR measurements with the BODY COIL
 BODY_SNR_TRA_1="/Users/papo/Documents/QA and Acceptance tests/PETMR_QA_20181029_Pat/hierarchixca/Annual_Qa_Mmr_Biograph/All_Physics_Marilena/SE_BODY_SNR_TRA_1";
 BODY_SNR_TRA_2="/Users/papo/Documents/QA and Acceptance tests/PETMR_QA_20181029_Pat/hierarchixca/Annual_Qa_Mmr_Biograph/All_Physics_Marilena/SE_BODY_SNR_TRA_2";
 
@@ -23,17 +23,20 @@ BODY_SNR_SAG_1="/Users/papo/Documents/QA and Acceptance tests/PETMR_QA_20181029_
 BODY_SNR_SAG_2="/Users/papo/Documents/QA and Acceptance tests/PETMR_QA_20181029_Pat/hierarchixca/Annual_Qa_Mmr_Biograph/All_Physics_Marilena/SE_BODY_SNR_SAG_2";
 
 
-//GEOMETRIC_LINEARITY_TRA measurements
+// GEOMETRIC_LINEARITY_TRA measurements
  GEOMETRY_TRA="/Users/papo/Documents/QA and Acceptance tests/PETMR_QA_20181029_Pat/hierarchixca/Annual_Qa_Mmr_Biograph/All_Physics_Marilena/SE_BODY_GEOMETRIC_LINEARITY_TRA";
  GEOMETRY_COR="/Users/papo/Documents/QA and Acceptance tests/PETMR_QA_20181029_Pat/hierarchixca/Annual_Qa_Mmr_Biograph/All_Physics_Marilena/SE_BODY_GEOMETRIC_LINEARITY_COR";
  GEOMETRY_SAG="/Users/papo/Documents/QA and Acceptance tests/PETMR_QA_20181029_Pat/hierarchixca/Annual_Qa_Mmr_Biograph/All_Physics_Marilena/SE_BODY_GEOMETRIC_LINEARITY_SAG";
 
-//GHOSTING measurements
+// GHOSTING measurements
  GHOSTING_1="/Users/papo/Documents/QA and Acceptance tests/PETMR_QA_20181029_Pat/hierarchixca/Annual_Qa_Mmr_Biograph/All_Physics_Marilena/MultiEchoSE_HEAD_GHOSTING_TRA_NSA1";
  GHOSTING_2="/Users/papo/Documents/QA and Acceptance tests/PETMR_QA_20181029_Pat/hierarchixca/Annual_Qa_Mmr_Biograph/All_Physics_Marilena/MultiEchoSE_HEAD_GHOSTING_TRA_NSA2";
 
+// Slice Position measurements
+SLICE_POS="/Users/papo/Documents/QA and Acceptance tests/PETMR_QA_20181029_Pat/hierarchixca/Annual_Qa_Mmr_Biograph/All_Physics_Marilena/SE_BODY_SLICE_POSITION_TRA";
 
-
+ 
+// Output folder
  Results_dir="/Users/papo/Desktop/QAResults";
 
 
@@ -75,6 +78,8 @@ call("ij.Prefs.set", "myMacros.GEOMETRY_SAG", GEOMETRY_SAG);
 call("ij.Prefs.set", "myMacros.GHOSTING_1", GHOSTING_1);
 call("ij.Prefs.set", "myMacros.GHOSTING_2", GHOSTING_2);
 
+//Slice Position
+call("ij.Prefs.set", "myMacros.SLICE_POS", SLICE_POS);
 
 //this will retrieve stored valeu of myMacros.savedir to myvalue
 //myvalue = call("ij.Prefs.get", "myMacros.savedir", "defaultValue");
@@ -99,6 +104,10 @@ runMacro("/Users/papo/MagNET_QA_scripts/SLICE_WIDTH.ijm");
 runMacro("/Users/papo/MagNET_QA_scripts/GHOSTING.ijm");
 
 
+// RUN SLICE_POS:
+// NOT READY!!!
+
+
 
 close("*");
 
@@ -106,4 +115,4 @@ print("");
 print("");
 print("");
 print("Done! Closing FIJI now... ");
-run("Quit");
+//run("Quit");

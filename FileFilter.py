@@ -74,7 +74,7 @@ def process(srcDir, dstDir, currentDir, fileName, keepDirectories):
   			if searchObj:
   				f.write(rf['id']+ ' = ' +str(path) +"\n")
   				break
-  				
+
 
 
 
