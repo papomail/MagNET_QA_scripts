@@ -87,29 +87,30 @@ call("ij.Prefs.set", "myMacros.SLICE_POS", SLICE_POS);
 
 
 // RUN SNR:
-runMacro("/Users/papo/MagNET_QA_scripts/SNR.ijm") ;
+// runMacro("/Users/papo/MagNET_QA_scripts/SNR.ijm") ;
 
 // RUN SIGNAL UNIFORMITY:
-runMacro("/Users/papo/MagNET_QA_scripts/SIGNAL_UNIFORMITY.ijm") ;
+// runMacro("/Users/papo/MagNET_QA_scripts/SIGNAL_UNIFORMITY.ijm") ;
 
 // RUN GEOMETRIC_LINEARITY:
-runMacro("/Users/papo/MagNET_QA_scripts/GEOMETRIC_LINEARITY.ijm");
+// runMacro("/Users/papo/MagNET_QA_scripts/GEOMETRIC_LINEARITY.ijm");
 
 
 // RUN SLICE WIDTH:
-runMacro("/Users/papo/MagNET_QA_scripts/SLICE_WIDTH.ijm");
+// runMacro("/Users/papo/MagNET_QA_scripts/SLICE_WIDTH.ijm");
 
 
 // RUN GHOSTING:
-runMacro("/Users/papo/MagNET_QA_scripts/GHOSTING.ijm");
+// runMacro("/Users/papo/MagNET_QA_scripts/GHOSTING.ijm");
 
 
 // RUN SLICE_POS:
-// NOT READY!!!
+// NOT READY!!! 
+runMacro("/Users/papo/MagNET_QA_scripts/SLICE_POSITION.ijm");
 
 
 
-close("*");
+// close("*");
 
 print("");
 print("");
