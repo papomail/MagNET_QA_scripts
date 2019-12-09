@@ -11,9 +11,9 @@ close("*");
 
 //Retrieve filenames and Results_dir path
 Results_dir = call("ij.Prefs.get", "myMacros.savedir", "defaultValue");
-GEOMETRIC_LINEARITY_TRA = call("ij.Prefs.get", "myMacros.GEOMETRIC_LINEARITY_TRA", "defaultValue");
-GEOMETRIC_LINEARITY_COR = call("ij.Prefs.get", "myMacros.GEOMETRIC_LINEARITY_COR", "defaultValue");
-GEOMETRIC_LINEARITY_SAG = call("ij.Prefs.get", "myMacros.GEOMETRIC_LINEARITY_SAG", "defaultValue");
+GEOMETRIC_LINEARITY_TRA = call("ij.Prefs.get", "myMacros.GEOMETRY_TRA", "defaultValue");
+GEOMETRIC_LINEARITY_COR = call("ij.Prefs.get", "myMacros.GEOMETRY_COR", "defaultValue");
+GEOMETRIC_LINEARITY_SAG = call("ij.Prefs.get", "myMacros.GEOMETRY_SAG", "defaultValue");
 
 
 
@@ -205,10 +205,9 @@ else {
       setResult("1st window profile", i, vprofile[i]);
        setResult("2nd window profile", i, vprofile2[i]);
        updateResults;
-
+       }
 
 }
-
 
 //save results
 saveAs("Results", outdir+File.separator+myimage+"_SLICE_WIDTH.csv");

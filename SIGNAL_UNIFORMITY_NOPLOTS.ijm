@@ -1,7 +1,7 @@
 
 
 
-macro "SIGNAL_UNIFORMITY" {
+macro "SIGNAL_UNIFORMITY_NOPLOTS" {
 
 ////Use if you want to call the macro with arguments
 //arguments=getArgument()
@@ -54,7 +54,7 @@ function SIGNAL_UNIFORMITY_TEST(filename,results_dir) {
   //    } ;
   close("*");
 
-uniformity_outdir=results_dir+File.separator+"Uniformity";
+uniformity_outdir=results_dir+File.separator+"UNIFORMITY";
 
 //Create uniformity folder
 if ( File.isDirectory(uniformity_outdir)==0 ){
@@ -123,45 +123,7 @@ setKeyDown("alt");
 saveAs("Results", uniformity_outdir+File.separator+myimage+"_UNIFORMITY.csv");
 //////////
 
-roiManager("reset");
-//PLOT HORIZONTAL profile
-selectWindow(myimage);
 
-makeRectangle(centre_pos[0]-80,  centre_pos[1]-5, 160, 10);
-roiManager("Add");
-roiManager("Update");
-
-//makeLine(centre_pos[0]-107, centre_pos[1], centre_pos[0]+107, centre_pos[1]);
-roiManager("Select", 0);
-hprofile = getProfile();
-//Plot profile
-Plot.create("Horizontal profile","Voxel number along X axis","Voxel intensity",hprofile);
-Plot.addText(myimage+": Horizontal profile",0.3,0.1);
-Plot.show();
-selectWindow("Horizontal profile");
-Plot.makeHighResolution("Horizontal profile_HiRes",3.0);
-saveAs("PNG", uniformity_outdir+File.separator+myimage+"_Horizontal_profile.png");
-
-
-roiManager("reset");
-/////////
-//Plot VERTICAL profile
-selectWindow(myimage);
-
-makeRectangle(centre_pos[0]-5,  centre_pos[1]-80, 10, 160);
-roiManager("Add");
-//makeLine(centre_pos[0], centre_pos[1]-107, centre_pos[0], centre_pos[1]+107);
-//makeLine(129, 16, 129, 240);
- roiManager("Select", 0);
- setKeyDown("alt");
- vprofile = getProfile();
- // Plot profile
-Plot.create("Vertical profile", "Voxel number along Y axis", "Voxel intensity", vprofile);
-Plot.addText(myimage+": Vertical profile", 0.3, 0.1);
-Plot.show();
-selectWindow("Vertical profile");
-Plot.makeHighResolution("Vertical profile_HiRes",3.0);
-saveAs("PNG", uniformity_outdir+File.separator+myimage+"_Vertical_profile.png");
 
 
 }
