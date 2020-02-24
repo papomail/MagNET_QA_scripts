@@ -225,7 +225,9 @@ Array.print(sortGhosts);
 roiManager("deselect");
 roiManager("deselect");
 
-roiManager("select", 2+sortGhosts[sortGhosts.length-1]); //Select the ROI with max ghosting. (first two rois correspond to Noise and Signal)
+//roiManager("select", 2+sortGhosts[sortGhosts.length-1]); //Select the ROI with max ghosting. (first two rois correspond to Noise and Signal)
+roiManager("select", 4+sortGhosts[sortGhosts.length-1]); //Select the ROI with max ghosting. (first two rois correspond to Noise and Signal, 3rd and 4th are too close to the phantom. 5th is chosen)
+
 roiManager("add");
 
 roiManager("select", roiManager("count")-1);
